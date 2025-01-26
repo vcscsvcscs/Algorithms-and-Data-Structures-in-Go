@@ -66,6 +66,11 @@ func balanceMMm(t **AVLNode, l *AVLNode) {}
 
 func balanceMMp(t **AVLNode, l *AVLNode) {}
 
-func balancePPm(t **AVLNode, l *AVLNode) {}
+func balancePPm(t **AVLNode, r *AVLNode) {}
 
-func balancePPp(t **AVLNode, l *AVLNode) {}
+func balancePPp(t **AVLNode, r *AVLNode) {
+	(*t).Right = r.Left
+	r.Left = *t
+	(*t).Balance, r.Balance = 0, 0
+	*t = r
+}
