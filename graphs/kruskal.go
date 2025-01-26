@@ -33,27 +33,33 @@ func (ks *KruskalStates) Union(x *Vertex, y *Vertex) {
 	}
 }
 
-func Kruskal(G *WeightedAdjacencyListGraph, A []Edge) {
+// O(m ∗ lg n)
+func Kruskal(G *WeightedAdjacencyListGraph, A []Edge) int {
 	ks := KruskalStates{π: make(map[*Vertex]*Vertex, len(G.V)), s: make(map[*Vertex]int, len(G.V))}
 	for _, v := range G.V {
 		ks.MakeSet(v)
 	}
+
 	A = make([]Edge, 0)
 	k := len(G.V)
 	Q := minPriorityQueue(&A, func(e Edge) float64 { return G.Weight(e) })
+
 	for k > 1 && len(Q) > 0 {
 		e := <-Q
 		x := ks.FindSet(e.U)
 		y := ks.FindSet(e.V)
 		if x != y {
-			
+			A = append(A, e)
+			ks.Union(x, y)
+			k--
+		}
 	}
 
+	return k
 }
 
 func minPriorityQueue(E *[]Edge, Weight func(Edge) float64) chan Edge {
 	Q := make(chan Edge, len(*E))
-	//  min sort on queue
 	sort.Slice(*E, func(i, j int) bool { return Weight((*E)[i]) < Weight((*E)[j]) })
 	for _, e := range *E {
 		Q <- e
