@@ -2,12 +2,14 @@ package graphs
 
 import "math"
 
-type DijkstraState struct {
+type DijkstraResult struct {
+	s *Vertex
 	d map[*Vertex]float64
 	π map[*Vertex]*Vertex
 }
 
-func Dijkstra(G *WeightedAdjacencyListGraph, s *Vertex) DijkstraState {
+// O((m + n) ∗ lg n)
+func Dijkstra(G *WeightedAdjacencyListGraph, s *Vertex) DijkstraResult {
 	d := make(map[*Vertex]float64, len(G.V))
 	π := make(map[*Vertex]*Vertex, len(G.V))
 
@@ -33,5 +35,5 @@ func Dijkstra(G *WeightedAdjacencyListGraph, s *Vertex) DijkstraState {
 		u = Q.RemMin()
 	}
 
-	return DijkstraState{d: d, π: π}
+	return DijkstraResult{d: d, π: π, s: s}
 }
